@@ -81,35 +81,36 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 font-sans text-gray-800">
-      
+    <div>
       {/* Header */}
-      <header className="w-full p-6 flex items-center justify-between fixed top-0 left-0 right-0 z-50 bg-white/30 backdrop-blur-md border-b border-white/20">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center text-white font-bold text-lg shadow-lg">B</div>
-          <h1 className="text-xl font-bold tracking-tight text-indigo-900">Busan Storyteller</h1>
+      <header className="app-header">
+        <div className="logo-container">
+          <div className="logo-icon">B</div>
+          <h1 className="logo-text">Busan Storyteller</h1>
         </div>
         {step !== AppStep.INPUT && (
-            <button onClick={handleReset} className="text-sm font-medium text-gray-600 hover:text-blue-600 transition-colors">
+            <button onClick={handleReset} className="header-btn">
                 처음으로
             </button>
         )}
       </header>
 
       {/* Main Content */}
-      <main className="container mx-auto px-4 pt-32 pb-12 min-h-screen flex flex-col justify-center">
+      <main className="main-content container">
         
         {/* Error Message */}
         {error && (
-          <div className="max-w-md mx-auto mb-8 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded shadow-md flex items-center justify-between" role="alert">
+          <div className="error-box" role="alert">
             <p>{error}</p>
-            <button onClick={() => setError(null)} className="font-bold">✕</button>
+            <button onClick={() => setError(null)} style={{ fontWeight: 'bold' }}>✕</button>
           </div>
         )}
 
         {/* Step Views */}
         {step === AppStep.INPUT && (
-          <StepInput onNext={handleInputSubmit} isLoading={isLoading} />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexGrow: 1 }}>
+             <StepInput onNext={handleInputSubmit} isLoading={isLoading} />
+          </div>
         )}
 
         {step === AppStep.HISTORY && historyData && (
@@ -135,7 +136,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="w-full text-center py-6 text-gray-500 text-sm">
+      <footer className="footer">
         <p>© 2024 Busan Storyteller. Powered by Google Gemini.</p>
       </footer>
     </div>

@@ -141,37 +141,47 @@ export const generateImage = async (
     // Default aspect ratio
     let aspectRatio = "4:3";
 
-    const baseContext = `Location: ${place} (Busan, South Korea). Historical Context: ${history.slice(0, 500)}. Emotion: ${emotion}.`;
+    // Use the fetched history as "searched material" for the image generation context
+    const baseContext = `
+      Source Material (from search):
+      Location: ${place} (Busan, South Korea)
+      Historical Context: ${history.slice(0, 1000)}
+      Emotion: ${emotion}
+    `;
 
     if (type === ContentType.WEBTOON) {
-      // Specific prompt for Webtoon using 'nano banana' (gemini-2.5-flash-image)
+      // Nano Banana (gemini-2.5-flash-image) optimized prompt for Webtoon
       prompt = `
         ${baseContext}
-        Task: Create a 4-panel webtoon (comic strip) layout.
-        Storyline: ${plan.plot}.
-        Characters: ${plan.characters}.
-        Style: Korean Webtoon style (Manhwa), colorful, digital illustration.
+        
+        Task: Create a 4-panel vertical Webtoon (comic strip) illustration.
+        
+        Storyline: ${plan.plot}
+        Characters: ${plan.characters}
         
         Requirements:
-        1. Create exactly 4 panels arranged in a grid or strip.
-        2. Visuals must be based on the historical context and real features of ${place}.
-        3. IMPORTANT: Include speech bubbles with KOREAN TEXT (Hangul) that matches the emotion and story.
-        4. The art style should be modern and appealing.
+        1. Layout: A vertical strip with exactly 4 distinct panels (4-cut webtoon).
+        2. Visuals: Depict the location ${place} and characters based on the provided historical context and story.
+        3. Style: Modern Korean Webtoon (Manhwa) style. Colorful, high-quality digital illustration.
+        4. Dialogue: Include speech bubbles with KOREAN TEXT (Hangul) reflecting the characters' conversation and emotion.
       `;
-      aspectRatio = "3:4"; // Vertical for webtoon
+      aspectRatio = "3:4"; // Vertical for webtoon strip
     } else {
       prompt = `
         ${baseContext}
+        
         Task: Create a high-quality concept art poster.
         Subject: ${plan.characters} at ${place}.
-        Style: Cinematic, atmospheric, detailed, reflecting the emotion of ${emotion}.
-        Visuals: Incorporate specific details from the historical context provided.
+        
+        Requirements:
+        1. Style: Cinematic, atmospheric, reflecting the emotion '${emotion}'.
+        2. Visuals: Incorporate specific architectural or environmental details from the historical context provided.
       `;
       aspectRatio = "4:3";
     }
 
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash-image',
+      model: 'gemini-2.5-flash-image', // Nano Banana
       contents: { parts: [{ text: prompt }] },
       config: {
         imageConfig: {
