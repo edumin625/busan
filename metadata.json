@@ -1,0 +1,5 @@
+{
+  "name": "Busan Storyteller",
+  "description": "An interactive tool that generates historical storytelling content based on Busan's landmarks and user emotions.",
+  "requestFramePermissions": []
+}
